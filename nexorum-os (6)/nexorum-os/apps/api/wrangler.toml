@@ -1,0 +1,23 @@
+name = "nexorum-api"
+main = "src/index.ts"
+compatibility_date = "2024-08-05"
+
+[[durable_objects.bindings]]
+name = "MATCH_ROOM"
+class_name = "MatchRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["MatchRoom"]
+
+[[kv_namespaces]]
+binding = "NEXORUM_CACHE"
+id = "REPLACE_WITH_YOUR_KV_ID"
+
+[vars]
+SUPABASE_URL = "https://your-project.supabase.co"
+# Secrets (set via wrangler secret put):
+# SUPABASE_ANON_KEY
+# SUPABASE_SERVICE_KEY
+# NOWPAYMENTS_API_KEY
+# NOWPAYMENTS_IPN_SECRET
