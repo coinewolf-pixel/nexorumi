@@ -1,0 +1,28 @@
+{
+  "name": "nexorum-platform",
+  "private": true,
+  "version": "1.0.0",
+  "description": "NEXORUM AI-Native Gaming Ecosystem Platform",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "db:migrate": "cd packages/database && supabase migration up",
+    "db:reset": "cd packages/database && supabase db reset",
+    "db:seed": "cd packages/database && psql $DATABASE_URL -f seed/seed.sql",
+    "api:dev": "cd apps/api && wrangler dev",
+    "api:deploy": "cd apps/api && wrangler deploy",
+    "web:dev": "cd apps/web && next dev",
+    "web:build": "cd apps/web && next build",
+    "mobile:start": "cd apps/mobile && expo start",
+    "ml:train": "cd packages/ml && python src/train.py"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
