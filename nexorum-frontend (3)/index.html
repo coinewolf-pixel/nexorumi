@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEXORUM | AI-Native Gaming Ecosystem</title>
+<meta name="description" content="Multi-market gaming platform with NEXO economy">
+<meta name="theme-color" content="#6366f1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='48' fill='%236366f1'/%3E%3Ctext x='96' y='125' font-size='90' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236366f1'/%3E%3Ctext x='32' y='44' font-size='36' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#13131f;--accent:#6366f1;--accent2:#a855f7;--text:#fff;--dim:rgba(255,255,255,0.4);--border:rgba(255,255,255,0.1)}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.header{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 16px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+.logo-text h1{font-size:16px;font-weight:700;letter-spacing:-0.3px}
+.logo-text p{font-size:11px;color:var(--dim)}
+.header-actions{display:flex;align-items:center;gap:8px}
+.btn-icon{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.05);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s}
+.btn-icon:hover{background:rgba(255,255,255,0.1)}
+.wallet-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:linear-gradient(90deg,rgba(99,102,241,0.2),rgba(168,85,247,0.2));border:1px solid rgba(99,102,241,0.3);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;font-size:13px}
+.main{max-width:1200px;margin:0 auto;padding:24px 16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:24px}
+.card{padding:20px;border-radius:16px;background:var(--card);border:1px solid var(--border);transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.2)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-icon{font-size:28px}
+.card-label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px}
+.card-value{font-size:26px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.card-sub{font-size:13px;color:var(--dim);margin-top:4px}
+.progress-card{padding:20px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);margin-bottom:24px}
+.progress-header{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px}
+.progress-bar{height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:fill 1s ease-out}
+@keyframes fill{from{width:0}}
+.section-title{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.markets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.market-card{position:relative;padding:20px 16px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);cursor:pointer;text-align:left;color:#fff;overflow:hidden;transition:all .2s}
+.market-card:hover{border-color:rgba(255,255,255,0.25);transform:scale(1.02)}
+.market-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:22px}
+.market-name{font-size:15px;font-weight:700}
+.market-players{font-size:12px;color:var(--dim);margin-top:3px}
+.actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.action-btn{padding:16px 12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s}
+.action-btn:hover{background:rgba(255,255,255,0.06)}
+.action-icon{font-size:22px}
+.action-text{font-size:13px;font-weight:500}
+.page{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
+.back-btn{padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;cursor:pointer;margin-bottom:16px;font-size:13px}
+.market-detail{padding:20px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
+.item-row{display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:10px;background:rgba(255,255,255,0.03);margin-bottom:8px;border:1px solid var(--border)}
+.item-name{font-weight:600;font-size:14px}
+.item-rarity{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;text-transform:uppercase;display:inline-block;margin-top:4px}
+.rarity-common{background:rgba(156,163,175,0.15);color:#9ca3af}
+.rarity-uncommon{background:rgba(34,197,94,0.15);color:#22c55e}
+.rarity-rare{background:rgba(59,130,246,0.15);color:#3b82f6}
+.rarity-epic{background:rgba(168,85,247,0.15);color:#c084fc}
+.rarity-legendary{background:rgba(245,158,11,0.15);color:#fbbf24}
+.item-price{color:var(--accent);font-weight:700;font-family:ui-monospace,monospace;font-size:14px}
+.login-form{max-width:380px;margin:80px auto;padding:32px;border-radius:20px;background:var(--card);border:1px solid var(--border)}
+.login-form h2{text-align:center;margin-bottom:24px;font-size:24px}
+.input{width:100%;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;font-size:15px;margin-bottom:12px}
+.input:focus{outline:none;border-color:var(--accent)}
+.btn-primary{width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-primary:hover{opacity:.9}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);padding:10px 20px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:#fff;font-size:13px;z-index:100;transition:transform .3s ease}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.loading{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none}
+.guild-card{padding:16px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:10px}
+.guild-name{font-weight:700;font-size:15px}
+.guild-tag{color:var(--accent);font-size:12px;font-family:monospace}
+.guild-info{color:var(--dim);font-size:12px;margin-top:4px}
+.leader-row{display:flex;align-items:center;padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);margin-bottom:6px;border:1px solid var(--border)}
+.leader-rank{width:36px;font-weight:700;color:var(--dim)}
+.leader-rank.top{color:#fbbf24;font-size:16px}
+.leader-name{flex:1;font-weight:600;font-size:14px}
+.leader-elo{color:var(--accent);font-weight:700;font-family:monospace;font-size:14px}
+.chat-box{position:fixed;bottom:80px;right:16px;width:320px;max-height:400px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:none;flex-direction:column;z-index:90}
+.chat-box.open{display:flex}
+.chat-header{padding:12px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;max-height:280px}
+.chat-msg{margin-bottom:8px;font-size:13px}
+.chat-msg b{color:var(--accent)}
+.chat-input{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input input{flex:1;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;font-size:13px}
+.chat-input button{padding:8px 14px;border-radius:8px;background:var(--accent);border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+@media(max-width:640px){
+.grid-3{grid-template-columns:1fr}
+.markets-grid{grid-template-columns:repeat(2,1fr)}
+.header-actions .btn-icon{display:none}
+.wallet-badge span:first-child{display:none}
+.chat-box{width:calc(100% - 32px);right:16px;left:16px}
+}
+</style>
+</head>
+<body>
+<div id="loading" class="loading"><div class="spinner"></div><p style="color:var(--dim);font-size:14px">Loading NEXORUM...</p></div>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<div id="chat" class="chat-box">
+  <div class="chat-header"><span>💬 Global Chat</span><button onclick="toggleChat()" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:18px">×</button></div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input"><input type="text" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div>
+</div>
+
+<script>
+const API_URL = localStorage.getItem('api_url') || 'https://nexorum-api.YOUR_SUBDOMAIN.workers.dev';
+
+const MARKETS = [
+  {id:'hunt',name:'Hunt Arena',emoji:'🏹',color:'#ef4444',players:1240,items:[{name:'Shadow Bow',rarity:'epic',price:250},{name:'Camo Cloak',rarity:'rare',price:120},{name:'Hunter Trap',rarity:'uncommon',price:45}]},
+  {id:'racing',name:'Racing Circuit',emoji:'🏎️',color:'#3b82f6',players:890,items:[{name:'Turbo Engine',rarity:'epic',price:300},{name:'Nitro Boost',rarity:'uncommon',price:15},{name:'Racing Suit',rarity:'rare',price:150}]},
+  {id:'fishing',name:'Fishing Waters',emoji:'🎣',color:'#14b8a6',players:650,items:[{name:'Mythic Rod',rarity:'legendary',price:500},{name:'Golden Bait',rarity:'rare',price:25},{name:'Aqua Armor',rarity:'epic',price:200}]},
+  {id:'farm',name:'Farm Valley',emoji:'🌾',color:'#22c55e',players:420,items:[{name:'Golden Seeds',rarity:'epic',price:75},{name:'Auto Harvester',rarity:'rare',price:180},{name:'Fertilizer X',rarity:'uncommon',price:20}]},
+  {id:'survival',name:'Survival Zone',emoji:'🛡️',color:'#a855f7',players:1100,items:[{name:'Survival Knife',rarity:'common',price:30},{name:'Medkit Pro',rarity:'rare',price:50},{name:'Base Shield',rarity:'epic',price:280}]}
+];
+
+const GUILDS = [
+  {id:1,name:'Shadow Legion',tag:'[SHDW]',members:42,level:15,treasury:12500},
+  {id:2,name:'Speed Demons',tag:'[SPD]',members:38,level:12,treasury:8900},
+  {id:3,name:'Aqua Kings',tag:'[AQUA]',members:29,level:10,treasury:5600}
+];
+
+const LEADERS = [
+  {rank:1,name:'ShadowHunter',elo:2450,wins:142,market:'hunt'},
+  {rank:2,name:'SpeedDemon',elo:2380,wins:128,market:'racing'},
+  {rank:3,name:'FishMaster',elo:2310,wins:115,market:'fishing'},
+  {rank:4,name:'FarmKing',elo:2250,wins:98,market:'farm'},
+  {rank:5,name:'SurvivorX',elo:2200,wins:105,market:'survival'},
+  {rank:6,name:'NightWolf',elo:2180,wins:95,market:'hunt'},
+  {rank:7,name:'DriftKing',elo:2150,wins:88,market:'racing'},
+  {rank:8,name:'DeepSea',elo:2120,wins:82,market:'fishing'},
+  {rank:9,name:'GreenThumb',elo:2100,wins:76,market:'farm'},
+  {rank:10,name:'LastMan',elo:2080,wins:91,market:'survival'}
+];
+
+let currentUser = null;
+let currentPage = 'dashboard';
+let chatOpen = false;
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2})}
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('chat').classList.toggle('open',chatOpen)}
+function sendChat(){const inp=document.getElementById('chat-input');const msg=inp.value.trim();if(!msg)return;const box=document.getElementById('chat-messages');box.innerHTML+=`<div class="chat-msg"><b>You:</b> ${msg}</div>`;box.scrollTop=box.scrollHeight;inp.value='';setTimeout(()=>{box.innerHTML+=`<div class="chat-msg"><b style="color:#22c55e">🤖 AI:</b> Processing your request about "${msg}"...</div>`;box.scrollTop=box.scrollHeight},800)}
+
+function renderHeader(title,subtitle,emoji){
+  const w = currentUser?.wallet || {nexo_balance:15420.50,nexo_staked:5000};
+  return `<header class="header"><div class="header-inner"><div class="logo"><div class="logo-icon">${emoji||'N'}</div><div class="logo-text"><h1>${title}</h1><p>${subtitle}</p></div></div><div class="header-actions"><button class="btn-icon" onclick="toggleChat()" title="Chat">💬</button><button class="btn-icon" onclick="showToast('Voice chat coming soon')" title="Voice">🎙️</button><div class="wallet-badge"><span>💎</span><span>${fmt(w.nexo_balance)} NEXO</span></div></div></div></header>`;
+}
+
+function renderDashboard(){
+  const w=currentUser?.wallet||{nexo_balance:15420.50,nexo_staked:5000};
+  const lvl=currentUser?.platform_level||42;
+  const xp=currentUser?.platform_xp||8750;
+  const need=lvl*1000;
+  const pct=Math.min((xp/need)*100,100);
+  return renderHeader('NEXORUM',`Platform Level ${lvl}`,'N')+`
+    <main class="main page">
+      <div class="grid-3">
+        <div class="card"><div class="card-header"><span class="card-icon">💎</span><span class="card-label">Total Balance</span></div><div class="card-value">${fmt(w.nexo_balance+w.nexo_staked)}</div><div class="card-sub">NEXO Tokens</div></div>
+        <div class="card"><div class="card-header"><span class="card-icon">🏆</span><span class="card-label">Global Rank</span></div><div class="card-value">#1,247</div><div class="card-sub">Top 5% of players</div></div>
+        <div class="card"><div class="card-header"><span class="card-icon">👥</span><span class="card-label">Friends Online</span></div><div class="card-value">12</div><div class="card-sub">3 in matches</div></div>
+      </div>
+      <div class="progress-card"><div class="progress-header"><span style="font-weight:700">Platform Level ${lvl}</span><span style="color:var(--dim);font-size:13px">${xp.toLocaleString()} / ${need.toLocaleString()} XP</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>
+      <h2 class="section-title"><span>📈</span> Game Markets</h2>
+      <div class="markets-grid">${MARKETS.map(m=>`<button class="market-card" onclick="go('market','${m.id}')" style="border-color:${m.color}30"><div class="market-icon" style="background:${m.color}20">${m.emoji}</div><div class="market-name">${m.name}</div><div class="market-players">${m.players.toLocaleString()} online</div></button>`).join('')}<button class="market-card" onclick="go('globalmarket')" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));border-color:rgba(99,102,241,0.3)"><div class="market-icon" style="background:linear-gradient(135deg,#6366f1,#a855f7);font-size:20px">🛒</div><div class="market-name">Global Market</div><div class="market-players">Trade across all markets</div></button></div>
+      <h2 class="section-title"><span>⚡</span> Quick Actions</h2>
+      <div class="actions-grid">
+        <button class="action-btn" onclick="go('ai')"><span class="action-icon">🤖</span><span class="action-text">AI Bot</span></button>
+        <button class="action-btn" onclick="showToast('Voice Chat: WebRTC ready')"><span class="action-icon">🎙️</span><span class="action-text">Voice</span></button>
+        <button class="action-btn" onclick="go('guilds')"><span class="action-icon">⚔️</span><span class="action-text">Guilds</span></button>
+        <button class="action-btn" onclick="go('leaderboard')"><span class="action-icon">🏆</span><span class="action-text">Rank</span></button>
+        <button class="action-btn" onclick="go('staking')"><span class="action-icon">📈</span><span class="action-text">Staking</span></button>
+        <button class="action-btn" onclick="go('nft')"><span class="action-icon">🖼️</span><span class="action-text">NFT</span></button>
+      </div>
+    </main>`;
+}
+
+function renderMarket(id){
+  const m=MARKETS.find(x=>x.id===id);if(!m)return go('dashboard');
+  return renderHeader(m.name,`${m.players.toLocaleString()} players online`,m.emoji)+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <div class="market-detail">
+        <h2 style="margin-bottom:16px;font-size:20px">🛒 ${m.name} Marketplace</h2>
+        ${m.items.map(i=>`<div class="item-row"><div><div class="item-name">${i.name}</div><span class="item-rarity rarity-${i.rarity}">${i.rarity}</span></div><div class="item-price">${i.price} NEXO</div></div>`).join('')}
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+        <button class="action-btn" onclick="showToast('Finding match in ${m.name}...')" style="padding:20px"><span class="action-icon" style="font-size:28px">🎮</span><span class="action-text" style="font-size:15px">Find Match</span></button>
+        <button class="action-btn" onclick="go('leaderboard')" style="padding:20px"><span class="action-icon" style="font-size:28px">🏆</span><span class="action-text" style="font-size:15px">Leaderboard</span></button>
+      </div>
+    </main>`;
+}
+
+function renderGuilds(){
+  return renderHeader('Guilds','Join a guild or create your own','⚔️')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <h2 class="section-title"><span>⚔️</span> Top Guilds</h2>
+      ${GUILDS.map(g=>`<div class="guild-card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="guild-name">${g.name} <span class="guild-tag">${g.tag}</span></div><div class="guild-info">Level ${g.level} • ${g.members}/50 members • Treasury: ${g.treasury.toLocaleString()} NEXO</div></div><button class="btn-primary" style="width:auto;padding:8px 16px;font-size:13px" onclick="showToast('Joined ${g.name}!')">Join</button></div></div>`).join('')}
+      <button class="btn-primary" style="margin-top:12px" onclick="showToast('Guild creation: 1000 NEXO required')">➕ Create Guild (1000 NEXO)</button>
+    </main>`;
+}
+
+function renderLeaderboard(){
+  return renderHeader('Leaderboard','Global rankings across all markets','🏆')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <h2 class="section-title"><span>🏆</span> Top Players</h2>
+      ${LEADERS.map(l=>`<div class="leader-row"><span class="leader-rank ${l.rank<=3?'top':''}">#${l.rank}</span><span class="leader-name">${l.name}</span><span style="color:var(--dim);font-size:12px;text-transform:capitalize;margin-right:8px">${l.market}</span><span class="leader-elo">${l.elo} ELO</span></div>`).join('')}
+    </main>`;
+}
+
+function renderStaking(){
+  return renderHeader('Staking','Stake NEXO to earn rewards','📈')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-icon">📈</span><span class="card-label">Active Position</span></div>
+        <div class="card-value">5,000 NEXO</div>
+        <div class="card-sub">12.5% APY • 30 days lock • 12 days remaining</div>
+        <button class="btn-primary" style="margin-top:16px" onclick="showToast('Rewards claimed: +18.75 NEXO')">Claim Rewards</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-icon">➕</span><span class="card-label">New Stake</span></div>
+        <input class="input" type="number" placeholder="Amount to stake" id="stake-amount">
+        <select class="input" id="stake-period" style="margin-bottom:16px"><option value="30">30 days (12.5% APY)</option><option value="60">60 days (15% APY)</option><option value="90">90 days (18.5% APY)</option></select>
+        <button class="btn-primary" onclick="showToast('Staked '+(document.getElementById('stake-amount').value||'0')+' NEXO')">Stake NEXO</button>
+      </div>
+    </main>`;
+}
+
+function renderNFT(){
+  return renderHeader('NFT Marketplace','Buy, sell & mint NFTs','🖼️')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <h2 class="section-title"><span>🖼️</span> Featured NFTs</h2>
+      <div class="markets-grid">
+        <div class="market-card" style="border-color:rgba(245,158,11,0.3)"><div class="market-icon" style="background:rgba(245,158,11,0.15);font-size:28px">🗡️</div><div class="market-name">Shadow Blade</div><div class="market-players" style="color:#fbbf24">Legendary • 2,500 NEXO</div></div>
+        <div class="market-card" style="border-color:rgba(168,85,247,0.3)"><div class="market-icon" style="background:rgba(168,85,247,0.15);font-size:28px">🏎️</div><div class="market-name">Neon Racer</div><div class="market-players" style="color:#c084fc">Epic • 1,200 NEXO</div></div>
+        <div class="market-card" style="border-color:rgba(59,130,246,0.3)"><div class="market-icon" style="background:rgba(59,130,246,0.15);font-size:28px">🎣</div><div class="market-name">Crystal Rod</div><div class="market-players" style="color:#60a5fa">Rare • 800 NEXO</div></div>
+      </div>
+      <button class="btn-primary" onclick="showToast('Mint NFT: Connect wallet first')">➕ Mint New NFT</button>
+    </main>`;
+}
+
+function renderAI(){
+  return renderHeader('AI Assistant','Powered by OpenAI','🤖')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <div class="market-detail" style="min-height:300px;display:flex;flex-direction:column">
+        <h2 style="margin-bottom:12px;font-size:18px">🤖 NEXORUM AI</h2>
+        <div id="ai-chat" style="flex:1;background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;margin-bottom:12px;overflow-y:auto;max-height:400px">
+          <div class="chat-msg"><b style="color:#22c55e">🤖 AI:</b> Hello! I'm your NEXORUM assistant. Ask me about strategies, market analysis, or game tips!</div>
+        </div>
+        <div class="chat-input" style="border:none;padding:0"><input type="text" id="ai-input" placeholder="Ask me anything..." style="flex:1" onkeypress="if(event.key==='Enter')sendAI()"><button onclick="sendAI()">Send</button></div>
+      </div>
+    </main>`;
+}
+function sendAI(){const inp=document.getElementById('ai-input');const msg=inp.value.trim();if(!msg)return;const box=document.getElementById('ai-chat');box.innerHTML+=`<div class="chat-msg"><b style="color:var(--accent)">You:</b> ${msg}</div>`;box.scrollTop=box.scrollHeight;inp.value='';setTimeout(()=>{const replies=["That's a great strategy! Focus on high-ELO matches for better rewards.","The Hunt market is trending up today. Good time to sell Shadow Bows.","Join a guild for bonus XP and shared treasury rewards.","Staking 90 days gives the best APY at 18.5%. Highly recommended!"];box.innerHTML+=`<div class="chat-msg"><b style="color:#22c55e">🤖 AI:</b> ${replies[Math.floor(Math.random()*replies.length)]}</div>`;box.scrollTop=box.scrollHeight},1000)}
+
+function renderGlobalMarket(){
+  const allItems = MARKETS.flatMap(m=>m.items.map(i=>({...i,market:m.name,marketId:m.id})));
+  return renderHeader('Global Market','Trade across all game markets','🛒')+`
+    <main class="main page">
+      <button class="back-btn" onclick="go('dashboard')">← Back</button>
+      <h2 class="section-title"><span>🛒</span> All Items</h2>
+      ${allItems.map(i=>`<div class="item-row"><div><div class="item-name">${i.name}</div><span class="item-rarity rarity-${i.rarity}">${i.rarity}</span><span style="color:var(--dim);font-size:11px;margin-left:6px">${i.market}</span></div><div class="item-price">${i.price} NEXO</div></div>`).join('')}
+    </main>`;
+}
+
+function renderLogin(){
+  return `<div class="login-form page">
+    <div style="text-align:center;margin-bottom:28px"><div class="logo-icon" style="width:56px;height:56px;font-size:28px;margin:0 auto 12px">N</div><h2>Welcome to NEXORUM</h2><p style="color:var(--dim);margin-top:6px;font-size:14px">AI-Native Gaming Ecosystem</p></div>
+    <input type="email" class="input" placeholder="Email" id="login-email" value="demo@nexorum.gg">
+    <input type="password" class="input" placeholder="Password" id="login-password" value="password">
+    <button class="btn-primary" onclick="doLogin()">Sign In</button>
+    <p style="text-align:center;margin-top:14px;color:var(--dim);font-size:13px">No account? <a href="#" style="color:var(--accent);text-decoration:none" onclick="showToast('Registration coming in v2')">Register</a></p>
+  </div>`;
+}
+
+function go(page,data){currentPage=page;const app=document.getElementById('app');
+  if(page==='dashboard')app.innerHTML=renderDashboard();
+  else if(page==='market')app.innerHTML=renderMarket(data);
+  else if(page==='guilds')app.innerHTML=renderGuilds();
+  else if(page==='leaderboard')app.innerHTML=renderLeaderboard();
+  else if(page==='staking')app.innerHTML=renderStaking();
+  else if(page==='nft')app.innerHTML=renderNFT();
+  else if(page==='ai')app.innerHTML=renderAI();
+  else if(page==='globalmarket')app.innerHTML=renderGlobalMarket();
+  else if(page==='login')app.innerHTML=renderLogin();
+  window.scrollTo(0,0);
+}
+
+function doLogin(){
+  currentUser={id:'demo-user',username:'PlayerOne',platform_level:42,platform_xp:8750,wallet:{nexo_balance:15420.50,nexo_staked:5000}};
+  localStorage.setItem('token','demo-token');
+  showToast('Welcome back, PlayerOne!');
+  go('dashboard');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('loading').style.display='none';
+  if(localStorage.getItem('token')){currentUser={id:'demo-user',username:'PlayerOne',platform_level:42,platform_xp:8750,wallet:{nexo_balance:15420.50,nexo_staked:5000}};go('dashboard');}
+  else go('login');
+});
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
