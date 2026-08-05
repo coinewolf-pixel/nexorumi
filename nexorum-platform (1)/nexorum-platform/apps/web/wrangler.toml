@@ -1,0 +1,13 @@
+name = "nexorum-web"
+compatibility_date = "2024-07-01"
+
+# Cloudflare Pages config
+# Build: cd apps/web && npm run build
+# Deploy: cd apps/web && npx wrangler pages deploy dist/
+
+[build]
+command = "npm run build"
+cwd = "apps/web"
+
+[[env.production]]
+name = "nexorum-web-prod"

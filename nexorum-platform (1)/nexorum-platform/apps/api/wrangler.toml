@@ -1,0 +1,25 @@
+name = "nexorum-api"
+main = "src/index.ts"
+compatibility_date = "2024-07-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+[[kv_namespaces]]
+binding = "NEXORUM_CACHE"
+id = "nexorum-kv-cache"
+
+[[durable_objects.bindings]]
+name = "MATCHMAKING_POOL"
+class_name = "MatchmakingPool"
+
+[[durable_objects.bindings]]
+name = "VOICE_ROOM"
+class_name = "VoiceRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["MatchmakingPool", "VoiceRoom"]
+
+# Workers deploy: cd apps/api && npx wrangler deploy
