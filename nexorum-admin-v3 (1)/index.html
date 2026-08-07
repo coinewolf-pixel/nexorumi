@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORUM | AI-Native Gaming Ecosystem</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#13131f;--accent:#6366f1;--accent2:#a855f7;--text:#fff;--dim:rgba(255,255,255,0.5);--border:rgba(255,255,255,0.1);--success:#22c55e;--danger:#ef4444;--warn:#f59e0b}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 16px}
+.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+.nav{display:flex;gap:8px}
+.nav-btn{padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;cursor:pointer;font-size:13px;transition:all .2s}
+.nav-btn:hover{background:rgba(255,255,255,0.1)}
+.nav-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+.main{max-width:1400px;margin:0 auto;padding:20px 16px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.card{padding:20px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:0.5px}
+.card-value{font-size:28px;font-weight:700;font-family:monospace}
+.card-sub{font-size:13px;color:var(--dim);margin-top:4px}
+.card.up{border-color:rgba(34,197,94,0.3)}
+.card.down{border-color:rgba(239,68,68,0.3)}
+.table{width:100%;border-collapse:collapse;margin-top:12px}
+.table th{text-align:left;padding:12px;font-size:12px;color:var(--dim);text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:600}
+.table td{padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px}
+.table tr:hover{background:rgba(255,255,255,0.02)}
+.badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase}
+.badge-admin{background:rgba(168,85,247,0.15);color:#c084fc}
+.badge-mod{background:rgba(59,130,246,0.15);color:#60a5fa}
+.badge-user{background:rgba(34,197,94,0.15);color:#22c55e}
+.badge-banned{background:rgba(239,68,68,0.15);color:#ef4444}
+.btn{padding:8px 14px;border-radius:8px;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.btn-danger{background:var(--danger)}
+.btn-success{background:var(--success)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.search{width:100%;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;margin-bottom:16px;font-size:14px}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:8px 16px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;cursor:pointer;font-size:13px}
+.tab-btn.active{background:rgba(99,102,241,0.2);border-color:rgba(99,102,241,0.5)}
+.chart-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-top:6px}
+.chart-fill{height:100%;border-radius:4px;transition:width .5s}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:300;display:none;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{width:90%;max-width:500px;padding:24px;border-radius:20px;background:var(--card);border:1px solid var(--border)}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:16px}
+.form-row{margin-bottom:12px}
+.form-label{font-size:13px;color:var(--dim);margin-bottom:4px;display:block}
+.input{width:100%;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;font-size:14px}
+.select{width:100%;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;font-size:14px}
+.select option{background:var(--card);color:#fff}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);padding:10px 20px;border-radius:10px;background:var(--card);border:1px solid var(--border);z-index:400;transition:transform .3s;font-size:13px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.login-form{max-width:360px;margin:80px auto;padding:32px;border-radius:20px;background:var(--card);border:1px solid var(--border)}
+.hidden{display:none}
+.page{animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}}
+.game-container{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;flex-direction:column}
+.game-container.active{display:flex}
+.game-header{padding:12px 16px;background:rgba(10,10,15,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.game-canvas{flex:1;display:flex;align-items:center;justify-content:center}
+.game-canvas canvas{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 0 30px rgba(99,102,241,0.2)}
+.game-controls{padding:12px;display:flex;gap:8px;justify-content:center;background:var(--card);border-top:1px solid var(--border)}
+.game-btn{padding:10px 20px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-weight:700;cursor:pointer;font-size:14px}
+@media(max-width:768px){.grid-4{grid-template-columns:repeat(2,1fr)}.table{font-size:12px}.table th,.table td{padding:8px}}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+
+<!-- GAMES -->
+<div id="game-hunt" class="game-container"><div class="game-header"><div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">← Back</button><span style="margin-left:12px;font-weight:700">🏹 Hunt Arena</span></div><div style="font-family:monospace">Score: <span id="hunt-score">0</span></div></div><div class="game-canvas"><canvas id="hunt-canvas" width="800" height="500"></canvas></div><div class="game-controls"><button class="game-btn" onclick="startHunt()">▶ Start</button><button class="game-btn" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Exit</button></div></div>
+<div id="game-racing" class="game-container"><div class="game-header"><div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">← Back</button><span style="margin-left:12px;font-weight:700">🏎️ Racing Circuit</span></div><div style="font-family:monospace">Score: <span id="racing-score">0</span></div></div><div class="game-canvas"><canvas id="racing-canvas" width="400" height="600"></canvas></div><div class="game-controls"><button class="game-btn" onclick="startRacing()">▶ Start</button><button class="game-btn" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Exit</button></div></div>
+<div id="game-fishing" class="game-container"><div class="game-header"><div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">← Back</button><span style="margin-left:12px;font-weight:700">🎣 Fishing Waters</span></div><div style="font-family:monospace">Score: <span id="fishing-score">0</span></div></div><div class="game-canvas"><canvas id="fishing-canvas" width="600" height="500"></canvas></div><div class="game-controls"><button class="game-btn" onclick="startFishing()">▶ Start</button><button class="game-btn" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Exit</button></div></div>
+<div id="game-farm" class="game-container"><div class="game-header"><div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">← Back</button><span style="margin-left:12px;font-weight:700">🌾 Farm Valley</span></div><div style="font-family:monospace">Score: <span id="farm-score">0</span></div></div><div class="game-canvas"><canvas id="farm-canvas" width="600" height="500"></canvas></div><div class="game-controls"><button class="game-btn" onclick="startFarm()">▶ Start</button><button class="game-btn" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Exit</button></div></div>
+<div id="game-survival" class="game-container"><div class="game-header"><div><button class="btn btn-sm" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">← Back</button><span style="margin-left:12px;font-weight:700">🛡️ Survival Zone</span></div><div style="font-family:monospace">Score: <span id="survival-score">0</span> | Wave: <span id="survival-wave">1</span></div></div><div class="game-canvas"><canvas id="survival-canvas" width="600" height="500"></canvas></div><div class="game-controls"><button class="game-btn" onclick="startSurvival()">▶ Start</button><button class="game-btn" style="background:rgba(255,255,255,0.1)" onclick="closeGame()">Exit</button></div></div>
+
+<!-- MODAL -->
+<div id="modal" class="modal"><div class="modal-content" id="modal-body"></div></div>
+
+<script>
+// ============================================
+// NEXORUM PLATFORM v2 — USERS + ADMIN
+// ============================================
+
+const API_URL = localStorage.getItem('api_url') || 'https://nexorum-api.YOUR_SUBDOMAIN.workers.dev';
+
+// Demo data
+const DEMO_USERS = [
+  {id:'u1',username:'ShadowHunter',email:'shadow@nexorum.gg',role:'user',level:42,xp:8750,wallet:15420,status:'online',created:'2026-01-15',games:142},
+  {id:'u2',username:'SpeedDemon',email:'speed@nexorum.gg',role:'user',level:38,xp:7200,wallet:8900,status:'in_game',created:'2026-02-01',games:98},
+  {id:'u3',username:'FishMaster',email:'fish@nexorum.gg',role:'moderator',level:35,xp:6500,wallet:12000,status:'online',created:'2026-01-20',games:87},
+  {id:'u4',username:'AdminOne',email:'admin@nexorum.gg',role:'admin',level:99,xp:99999,wallet:999999,status:'online',created:'2025-12-01',games:999},
+  {id:'u5',username:'BannedUser',email:'banned@nexorum.gg',role:'banned',level:5,xp:100,wallet:0,status:'offline',created:'2026-03-01',games:3},
+  {id:'u6',username:'NewPlayer',email:'new@nexorum.gg',role:'user',level:1,xp:0,wallet:100,status:'online',created:'2026-08-05',games:0},
+];
+
+const DEMO_TRANSACTIONS = [
+  {id:'t1',user:'ShadowHunter',type:'reward',amount:150,status:'completed',date:'2026-08-05 14:30'},
+  {id:'t2',user:'SpeedDemon',type:'purchase',amount:-250,status:'completed',date:'2026-08-05 13:15'},
+  {id:'t3',user:'FishMaster',type:'stake',amount:-5000,status:'completed',date:'2026-08-05 12:00'},
+  {id:'t4',user:'ShadowHunter',type:'transfer',amount:-1000,status:'pending',date:'2026-08-05 11:45'},
+  {id:'t5',user:'NewPlayer',type:'deposit',amount:100,status:'completed',date:'2026-08-05 10:00'},
+];
+
+const DEMO_ITEMS = [
+  {id:'i1',name:'Shadow Bow',category:'weapon',rarity:'epic',market:'hunt',price:250,supply:500,tradable:true},
+  {id:'i2',name:'Turbo Engine',category:'vehicle',rarity:'epic',market:'racing',price:300,supply:800,tradable:true},
+  {id:'i3',name:'Mythic Rod',category:'tool',rarity:'legendary',market:'fishing',price:500,supply:200,tradable:true},
+  {id:'i4',name:'Golden Seeds',category:'material',rarity:'epic',market:'farm',price:75,supply:3000,tradable:true},
+  {id:'i5',name:'Base Shield',category:'armor',rarity:'epic',market:'survival',price:280,supply:800,tradable:true},
+];
+
+let user = null, page = 'login', adminTab = 'overview', gameActive = null, gameLoop = null;
+let scores = {hunt:0,racing:0,fishing:0,farm:0,survival:0};
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function fmt(n){return n.toLocaleString()}
+function isAdmin(){return user?.role==='admin'}
+function isMod(){return user?.role==='moderator'||user?.role==='admin'}
+
+// ============================================
+// AUTH
+// ============================================
+function renderLogin(){
+  return `<div class="login-form page">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;font-weight:700">N</div>
+      <h2 style="font-size:24px">NEXORUM</h2>
+      <p style="color:var(--dim);margin-top:6px;font-size:14px">AI-Native Gaming Ecosystem</p>
+    </div>
+    <input class="input" type="email" value="demo@nexorum.gg" id="email" style="margin-bottom:12px">
+    <input class="input" type="password" value="password" id="pass" style="margin-bottom:12px">
+    <select class="select" id="demo-role" style="margin-bottom:16px">
+      <option value="user">Login as User</option>
+      <option value="moderator">Login as Moderator</option>
+      <option value="admin">Login as Admin</option>
+    </select>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Sign In</button>
+    <p style="text-align:center;margin-top:14px;color:var(--dim);font-size:13px">No account? <span style="color:var(--accent);cursor:pointer" onclick="showToast('Registration via API /auth/register')">Register</span></p>
+  </div>`;
+}
+
+function doLogin(){
+  const role = document.getElementById('demo-role').value;
+  const demoUser = DEMO_USERS.find(u=>u.role===role) || DEMO_USERS[0];
+  user = {...demoUser, wallet:demoUser.wallet, staked:5000};
+  localStorage.setItem('user', JSON.stringify(user));
+  showToast(`Welcome, ${user.username}! (${user.role})`);
+  go('dashboard');
+}
+
+function logout(){user=null;localStorage.removeItem('user');go('login');showToast('Logged out')}
+
+// ============================================
+// HEADER
+// ============================================
+function renderHeader(title,subtitle){
+  const isAdm = isAdmin();
+  return `<div class="header"><div class="header-inner">
+    <div class="logo" onclick="go('dashboard')"><div class="logo-icon">N</div><div><div style="font-size:16px;font-weight:700">${title}</div><div style="font-size:11px;color:var(--dim)">${subtitle}</div></div></div>
+    <div class="nav">
+      ${isAdm?`<button class="nav-btn ${page==='admin'?'active':''}" onclick="go('admin')">🛡️ Admin</button>`:''}
+      <button class="nav-btn ${page==='dashboard'?'active':''}" onclick="go('dashboard')">🏠 Home</button>
+      <button class="nav-btn" onclick="go('leaderboard')">🏆 Rank</button>
+      <button class="nav-btn" onclick="go('wallet')">💎 Wallet</button>
+      <button class="nav-btn" onclick="logout()">🚪 Exit</button>
+    </div>
+  </div></div>`;
+}
+
+// ============================================
+// DASHBOARD (USER)
+// ============================================
+function renderDashboard(){
+  const need = user.level * 1000;
+  const pct = Math.min((user.xp/need)*100,100);
+  return renderHeader('NEXORUM',`Level ${user.level} • ${user.role}`) + `
+  <main class="main page">
+    <div class="grid-4">
+      <div class="card"><div class="card-header">💎 Balance</div><div class="card-value">${fmt(user.wallet)}</div><div class="card-sub">NEXO Tokens</div></div>
+      <div class="card"><div class="card-header">🏆 Rank</div><div class="card-value">#${DEMO_USERS.sort((a,b)=>b.xp-a.xp).findIndex(u=>u.id===user.id)+1}</div><div class="card-sub">Global position</div></div>
+      <div class="card"><div class="card-header">🎮 Score</div><div class="card-value">${Object.values(scores).reduce((a,b)=>a+b,0)}</div><div class="card-sub">Total game score</div></div>
+      <div class="card"><div class="card-header">📈 Staked</div><div class="card-value">${fmt(user.staked||0)}</div><div class="card-sub">12.5% APY</div></div>
+    </div>
+    <div class="progress-card"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-weight:700">Level ${user.level}</span><span style="color:var(--dim);font-size:13px">${user.xp} / ${need} XP</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>
+
+    <h2 class="section-title">🎮 Play Now</h2>
+    <div class="grid-4">
+      <div class="card" style="cursor:pointer;border-color:rgba(239,68,68,0.3)" onclick="openGame('hunt')"><div style="font-size:32px;margin-bottom:8px">🏹</div><div style="font-weight:700">Hunt Arena</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Click targets • Best: ${scores.hunt}</div></div>
+      <div class="card" style="cursor:pointer;border-color:rgba(59,130,246,0.3)" onclick="openGame('racing')"><div style="font-size:32px;margin-bottom:8px">🏎️</div><div style="font-weight:700">Racing Circuit</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Avoid obstacles • Best: ${scores.racing}</div></div>
+      <div class="card" style="cursor:pointer;border-color:rgba(20,184,166,0.3)" onclick="openGame('fishing')"><div style="font-size:32px;margin-bottom:8px">🎣</div><div style="font-weight:700">Fishing Waters</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Catch fish • Best: ${scores.fishing}</div></div>
+      <div class="card" style="cursor:pointer;border-color:rgba(34,197,94,0.3)" onclick="openGame('farm')"><div style="font-size:32px;margin-bottom:8px">🌾</div><div style="font-weight:700">Farm Valley</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Grow crops • Best: ${scores.farm}</div></div>
+      <div class="card" style="cursor:pointer;border-color:rgba(168,85,247,0.3)" onclick="openGame('survival')"><div style="font-size:32px;margin-bottom:8px">🛡️</div><div style="font-weight:700">Survival Zone</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Survive waves • Best: ${scores.survival}</div></div>
+      <div class="card" style="cursor:pointer;border-color:rgba(99,102,241,0.3)" onclick="showToast('Global Market: coming via API /markets/global')"><div style="font-size:32px;margin-bottom:8px">🛒</div><div style="font-weight:700">Global Market</div><div style="color:var(--dim);font-size:13px;margin-top:4px">Trade all items</div></div>
+    </div>
+  </main>`;
+}
+
+// ============================================
+// ADMIN PANEL (отдельная страница)
+// ============================================
+function renderAdmin(){
+  if(!isAdmin()){showToast('Access denied');go('dashboard');return''}
+  const totalUsers = DEMO_USERS.length;
+  const onlineUsers = DEMO_USERS.filter(u=>u.status==='online').length;
+  const totalNexo = DEMO_USERS.reduce((s,u)=>s+u.wallet,0);
+  const bannedUsers = DEMO_USERS.filter(u=>u.role==='banned').length;
+
+  let content = '';
+  if(adminTab==='overview') content = renderAdminOverview(totalUsers,onlineUsers,totalNexo,bannedUsers);
+  else if(adminTab==='users') content = renderAdminUsers();
+  else if(adminTab==='transactions') content = renderAdminTransactions();
+  else if(adminTab==='items') content = renderAdminItems();
+  else if(adminTab==='games') content = renderAdminGames();
+
+  return renderHeader('🛡️ Admin Panel',`Managing ${totalUsers} users`) + `
+  <main class="main page">
+    <div class="tabs">
+      <button class="tab-btn ${adminTab==='overview'?'active':''}" onclick="setAdminTab('overview')">📊 Overview</button>
+      <button class="tab-btn ${adminTab==='users'?'active':''}" onclick="setAdminTab('users')">👥 Users</button>
+      <button class="tab-btn ${adminTab==='transactions'?'active':''}" onclick="setAdminTab('transactions')">💰 Transactions</button>
+      <button class="tab-btn ${adminTab==='items'?'active':''}" onclick="setAdminTab('items')">📦 Items</button>
+      <button class="tab-btn ${adminTab==='games'?'active':''}" onclick="setAdminTab('games')">🎮 Games</button>
+    </div>
+    ${content}
+  </main>`;
+}
+
+function setAdminTab(tab){adminTab=tab;go('admin')}
+
+function renderAdminOverview(total,online,nexo,banned){
+  return `
+    <div class="grid-4">
+      <div class="card up"><div class="card-header">👥 Total Users</div><div class="card-value">${total}</div><div class="card-sub">+2 today</div></div>
+      <div class="card up"><div class="card-header">🟢 Online</div><div class="card-value">${online}</div><div class="card-sub">${Math.round(online/total*100)}% active</div></div>
+      <div class="card"><div class="card-header">💎 Total NEXO</div><div class="card-value">${fmt(nexo)}</div><div class="card-sub">Across all wallets</div></div>
+      <div class="card down"><div class="card-header">🚫 Banned</div><div class="card-value">${banned}</div><div class="card-sub">Needs review</div></div>
+    </div>
+    <div class="card" style="margin-top:20px"><div class="card-header">📈 Platform Activity (last 7 days)</div>
+      ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d,i)=>`<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${d}</span><span>${[45,62,58,75,89,95,70][i]} users</span></div><div class="chart-bar"><div class="chart-fill" style="width:${[45,62,58,75,89,95,70][i]}%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div></div>`).join('')}
+    </div>`;
+}
+
+function renderAdminUsers(){
+  return `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:700">👥 User Management</div>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Add user: POST /admin/users')">➕ Add User</button>
+      </div>
+      <input class="search" placeholder="Search users..." onkeyup="filterUsers(this.value)">
+      <table class="table" id="users-table">
+        <thead><tr><th>User</th><th>Role</th><th>Level</th><th>Wallet</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody>${DEMO_USERS.map(u=>`<tr data-name="${u.username.toLowerCase()}">
+          <td><div style="font-weight:600">${u.username}</div><div style="color:var(--dim);font-size:12px">${u.email}</div></td>
+          <td><span class="badge badge-${u.role}">${u.role}</span></td>
+          <td>${u.level}</td>
+          <td style="font-family:monospace">${fmt(u.wallet)} NEXO</td>
+          <td><span style="color:${u.status==='online'?'#22c55e':u.status==='in_game'?'#fbbf24':'var(--dim)'}">●</span> ${u.status}</td>
+          <td style="color:var(--dim);font-size:12px">${u.created}</td>
+          <td><button class="btn btn-sm" style="background:rgba(59,130,246,0.2);margin-right:4px" onclick="editUser('${u.id}')">Edit</button>${u.role!=='banned'?`<button class="btn btn-sm" style="background:var(--danger)" onclick="banUser('${u.id}')">Ban</button>`:`<button class="btn btn-sm" style="background:var(--success)" onclick="unbanUser('${u.id}')">Unban</button>`}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function filterUsers(q){document.querySelectorAll('#users-table tbody tr').forEach(r=>r.style.display=r.dataset.name.includes(q.toLowerCase())?'':'none')}
+function banUser(id){const u=DEMO_USERS.find(x=>x.id===id);if(u){u.role='banned';u.status='offline';showToast(`Banned ${u.username}`);go('admin')}}
+function unbanUser(id){const u=DEMO_USERS.find(x=>x.id===id);if(u){u.role='user';u.status='offline';showToast(`Unbanned ${u.username}`);go('admin')}}
+function editUser(id){const u=DEMO_USERS.find(x=>x.id===id);if(!u)return;document.getElementById('modal').classList.add('active');document.getElementById('modal-body').innerHTML=`<div class="modal-title">Edit User: ${u.username}</div><div class="form-row"><label class="form-label">Username</label><input class="input" value="${u.username}"></div><div class="form-row"><label class="form-label">Email</label><input class="input" value="${u.email}"></div><div class="form-row"><label class="form-label">Role</label><select class="select"><option ${u.role==='user'?'selected':''}>user</option><option ${u.role==='moderator'?'selected':''}>moderator</option><option ${u.role==='admin'?'selected':''}>admin</option><option ${u.role==='banned'?'selected':''}>banned</option></select></div><div class="form-row"><label class="form-label">Wallet Balance</label><input class="input" type="number" value="${u.wallet}"></div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-primary" onclick="showToast('Saved (demo)');closeModal()">Save</button><button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeModal()">Cancel</button></div>`;}
+function closeModal(){document.getElementById('modal').classList.remove('active')}
+
+function renderAdminTransactions(){
+  return `
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:12px">💰 Recent Transactions</div>
+      <table class="table">
+        <thead><tr><th>ID</th><th>User</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>${DEMO_TRANSACTIONS.map(t=>`<tr><td style="font-family:monospace;font-size:12px;color:var(--dim)">${t.id}</td><td>${t.user}</td><td><span class="badge badge-${t.type==='reward'?'user':t.type==='purchase'?'mod':t.type==='stake'?'admin':'user'}">${t.type}</span></td><td style="font-family:monospace;color:${t.amount>0?'var(--success)':'var(--danger)'}">${t.amount>0?'+':''}${t.amount}</td><td>${t.status}</td><td style="color:var(--dim);font-size:12px">${t.date}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function renderAdminItems(){
+  return `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:700">📦 Item Catalog</div>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Add item: POST /admin/items')">➕ Add Item</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>Item</th><th>Category</th><th>Rarity</th><th>Market</th><th>Price</th><th>Supply</th><th>Actions</th></tr></thead>
+        <tbody>${DEMO_ITEMS.map(i=>`<tr><td style="font-weight:600">${i.name}</td><td>${i.category}</td><td><span class="badge badge-${i.rarity==='legendary'?'admin':i.rarity==='epic'?'mod':'user'}">${i.rarity}</span></td><td>${i.market}</td><td style="font-family:monospace">${i.price} NEXO</td><td>${i.supply}</td><td><button class="btn btn-sm" style="background:rgba(59,130,246,0.2)">Edit</button></td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function renderAdminGames(){
+  return `
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:12px">🎮 Game Statistics</div>
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="card"><div class="card-header">🏹 Hunt Arena</div><div class="card-value">1,240</div><div class="card-sub">Matches today</div></div>
+        <div class="card"><div class="card-header">🏎️ Racing</div><div class="card-value">890</div><div class="card-sub">Matches today</div></div>
+        <div class="card"><div class="card-header">🎣 Fishing</div><div class="card-value">650</div><div class="card-sub">Matches today</div></div>
+        <div class="card"><div class="card-header">🛡️ Survival</div><div class="card-value">1,100</div><div class="card-sub">Matches today</div></div>
+      </div>
+      <div style="font-weight:700;margin-bottom:12px">Server Status</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <div class="card" style="border-color:rgba(34,197,94,0.3)"><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--success);font-size:20px">●</span><div><div style="font-weight:700">API Server</div><div style="color:var(--dim);font-size:12px">Online • 99.9% uptime</div></div></div></div>
+        <div class="card" style="border-color:rgba(34,197,94,0.3)"><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--success);font-size:20px">●</span><div><div style="font-weight:700">Database</div><div style="color:var(--dim);font-size:12px">Supabase • Connected</div></div></div></div>
+        <div class="card" style="border-color:rgba(34,197,94,0.3)"><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--success);font-size:20px">●</span><div><div style="font-weight:700">ML Matchmaking</div><div style="color:var(--dim);font-size:12px">Active • 6 features</div></div></div></div>
+      </div>
+    </div>`;
+}
+
+// ============================================
+// OTHER PAGES
+// ============================================
+function renderLeaderboard(){
+  const all = [...DEMO_USERS].sort((a,b)=>b.xp-a.xp);
+  return renderHeader('Leaderboard','Global Rankings') + `
+  <main class="main page">
+    <button class="btn btn-sm" style="background:rgba(255,255,255,0.1);margin-bottom:16px" onclick="go('dashboard')">← Back</button>
+    <div class="card">
+      <table class="table">
+        <thead><tr><th>Rank</th><th>Player</th><th>Level</th><th>XP</th><th>Games</th></tr></thead>
+        <tbody>${all.map((p,i)=>`<tr><td style="font-weight:700;color:${i<3?'#fbbf24':'var(--dim)'}">#${i+1}</td><td><div style="font-weight:600">${p.username}</div><span class="badge badge-${p.role}" style="font-size:10px">${p.role}</span></td><td>${p.level}</td><td style="font-family:monospace">${fmt(p.xp)}</td><td>${p.games}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </main>`;
+}
+
+function renderWallet(){
+  return renderHeader('Wallet','NEXO Balance') + `
+  <main class="main page">
+    <button class="btn btn-sm" style="background:rgba(255,255,255,0.1);margin-bottom:16px" onclick="go('dashboard')">← Back</button>
+    <div class="card" style="margin-bottom:16px"><div class="card-header">💎 Available</div><div class="card-value">${fmt(user.wallet)}</div><div class="card-sub">NEXO</div></div>
+    <div class="card" style="margin-bottom:16px"><div class="card-header">📈 Staked</div><div class="card-value">${fmt(user.staked||0)}</div><div class="card-sub">30 days @ 12.5% APY</div></div>
+    <button class="btn btn-primary" style="width:100%" onclick="showToast('Transfer: POST /wallet/transfer')">Transfer NEXO</button>
+  </main>`;
+}
+
+// ============================================
+// GAME ENGINE (same as before)
+// ============================================
+function openGame(id){document.querySelectorAll('.game-container').forEach(el=>el.classList.remove('active'));document.getElementById('game-'+id).classList.add('active');gameActive=id}
+function closeGame(){if(gameLoop){cancelAnimationFrame(gameLoop);gameLoop=null}gameActive=null;document.querySelectorAll('.game-container').forEach(el=>el.classList.remove('active'));go('dashboard')}
+
+// Hunt
+let hunt={score:0,targetsArr:[],lastSpawn:0};
+function startHunt(){const c=document.getElementById('hunt-canvas'),ctx=c.getContext('2d');hunt={score:0,targetsArr:[],lastSpawn:0,start:Date.now()};function spawn(){hunt.targetsArr.push({x:50+Math.random()*(c.width-100),y:50+Math.random()*(c.height-100),r:20+Math.random()*20,life:2000,born:Date.now(),color:`hsl(${Math.random()*360},70%,60%)`})}function update(){const now=Date.now(),time=Math.max(0,30-Math.floor((now-hunt.start)/1000));if(now-hunt.lastSpawn>800){spawn();hunt.lastSpawn=now}hunt.targetsArr=hunt.targetsArr.filter(t=>now-t.born<t.life);if(time<=0){scores.hunt=Math.max(scores.hunt,hunt.score);user.xp+=hunt.score;showToast(`Hunt Over! +${hunt.score} XP`);setTimeout(closeGame,2000);return}document.getElementById('hunt-score').textContent=hunt.score}function draw(){ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='rgba(99,102,241,0.3)';ctx.lineWidth=2;for(let i=0;i<10;i++){ctx.beginPath();ctx.arc(c.width/2,c.height/2,50+i*30,0,Math.PI*2);ctx.stroke()}hunt.targetsArr.forEach(t=>{const age=Date.now()-t.born,scale=1-age/t.life;ctx.beginPath();ctx.arc(t.x,t.y,t.r*scale,0,Math.PI*2);ctx.fillStyle=t.color;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 14px monospace';ctx.textAlign='center';ctx.fillText(Math.ceil((t.life-age)/100),t.x,t.y+5)});ctx.fillStyle='#fff';ctx.font='bold 20px monospace';ctx.textAlign='left';ctx.fillText(`TIME: ${Math.max(0,30-Math.floor((Date.now()-hunt.start)/1000))}s`,20,30)}function loop(){update();draw();gameLoop=requestAnimationFrame(loop)}c.onclick=(e)=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(let i=hunt.targetsArr.length-1;i>=0;i--){const t=hunt.targetsArr[i],dx=mx-t.x,dy=my-t.y;if(dx*dx+dy*dy<t.r*t.r){hunt.score+=100;hunt.targetsArr.splice(i,1);break}}};loop()}
+
+// Racing
+let racing={score:0,speed:0,playerX:200,obstacles:[],roadOffset:0};
+function startRacing(){const c=document.getElementById('racing-canvas'),ctx=c.getContext('2d');racing={score:0,speed:5,playerX:200,obstacles:[],roadOffset:0,gameOver:false};let keys={};document.onkeydown=(e)=>keys[e.key]=true;document.onkeyup=(e)=>keys[e.key]=false;function update(){if(racing.gameOver)return;racing.speed=Math.min(20,5+racing.score/500);if(keys['ArrowLeft']||keys['a'])racing.playerX-=8;if(keys['ArrowRight']||keys['d'])racing.playerX+=8;racing.playerX=Math.max(40,Math.min(360,racing.playerX));if(Math.random()<0.02)racing.obstacles.push({x:60+Math.random()*280,y:-50,w:40,h:40,speed:racing.speed});racing.obstacles.forEach(o=>o.y+=o.speed);racing.obstacles=racing.obstacles.filter(o=>o.y<c.height+50);const px=racing.playerX-20,py=c.height-80,pw=40,ph=60;for(let o of racing.obstacles){if(px<o.x+o.w&&px+pw>o.x&&py<o.y+o.h&&py+ph>o.y){racing.gameOver=true;scores.racing=Math.max(scores.racing,racing.score);user.xp+=Math.floor(racing.score/10);showToast(`Crash! +${Math.floor(racing.score/10)} XP`);setTimeout(closeGame,2000);return}}racing.score+=Math.floor(racing.speed);document.getElementById('racing-score').textContent=racing.score}function draw(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#0f0f1a';ctx.fillRect(50,0,300,c.height);ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.setLineDash([20,20]);ctx.beginPath();ctx.moveTo(200,0);ctx.lineTo(200,c.height);ctx.stroke();ctx.setLineDash([]);for(let i=0;i<10;i++){const y=(i*80+racing.roadOffset)%c.height;ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fillRect(198,y,4,40)}ctx.fillStyle='#3b82f6';ctx.fillRect(racing.playerX-20,c.height-80,40,60);ctx.fillStyle='#60a5fa';ctx.fillRect(racing.playerX-15,c.height-75,30,20);ctx.fillStyle='#1e40af';ctx.fillRect(racing.playerX-18,c.height-50,8,15);ctx.fillRect(racing.playerX+10,c.height-50,8,15);racing.obstacles.forEach(o=>{ctx.fillStyle='#ef4444';ctx.fillRect(o.x,o.y,o.w,o.h)})}function loop(){update();draw();if(!racing.gameOver)gameLoop=requestAnimationFrame(loop)}loop()}
+
+// Fishing
+let fishing={score:0,caught:0,fish:[],hookY:100,casting:false};
+function startFishing(){const c=document.getElementById('fishing-canvas'),ctx=c.getContext('2d');fishing={score:0,caught:0,fish:[],hookY:80,casting:false,gameOver:false};for(let i=0;i<5;i++)fishing.fish.push({x:100+i*100,y:250+Math.random()*150,size:20+Math.random()*30,color:`hsl(${160+Math.random()*60},70%,50%)`,speed:0.5+Math.random()*1.5,dir:Math.random()>0.5?1:-1,caught:false});function update(){if(fishing.gameOver)return;fishing.fish.forEach(f=>{f.x+=f.speed*f.dir;if(f.x<50||f.x>c.width-50)f.dir*=-1});document.getElementById('fishing-score').textContent=fishing.score;document.getElementById('fishing-caught').textContent=fishing.caught}function draw(){const grad=ctx.createLinearGradient(0,0,0,c.height);grad.addColorStop(0,'#0ea5e9');grad.addColorStop(1,'#0c4a6e');ctx.fillStyle=grad;ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=2;for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(0,200+i*60);for(let x=0;x<c.width;x+=20)ctx.lineTo(x,200+i*60+Math.sin((x+Date.now()/10)/50)*10);ctx.stroke()}fishing.fish.forEach(f=>{if(f.caught)return;ctx.fillStyle=f.color;ctx.beginPath();ctx.ellipse(f.x,f.y,f.size,f.size/2,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(f.x+f.dir*8,f.y-3,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#000';ctx.beginPath();ctx.arc(f.x+f.dir*9,f.y-3,1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(f.x-f.dir*f.size,f.y);ctx.lineTo(f.x-f.dir*(f.size+10),f.y-5);ctx.lineTo(f.x-f.dir*(f.size+10),f.y+5);ctx.fill()});ctx.strokeStyle='#8b5cf6';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(c.width/2,0);ctx.lineTo(c.width/2,fishing.hookY);ctx.stroke();ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(c.width/2,fishing.hookY,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 16px monospace';ctx.textAlign='left';ctx.fillText('SPACE or TAP to cast',20,30);ctx.fillText(`Caught: ${fishing.caught}/5`,20,55)}function cast(){if(fishing.casting)return;fishing.casting=true;let y=fishing.hookY;const drop=setInterval(()=>{y+=8;fishing.hookY=y;if(y>c.height-50){clearInterval(drop);reelIn()}},20)}function reelIn(){let caught=false;fishing.fish.forEach(f=>{if(!f.caught&&Math.abs(f.x-c.width/2)<40&&Math.abs(f.y-fishing.hookY)<40){f.caught=true;fishing.caught++;fishing.score+=f.size*10;caught=true}});const reel=setInterval(()=>{fishing.hookY-=6;if(fishing.hookY<=80){clearInterval(reel);fishing.casting=false;if(!caught&&fishing.caught>=5){fishing.gameOver=true;scores.fishing=Math.max(scores.fishing,fishing.score);user.xp+=fishing.score;showToast(`Done! +${fishing.score} XP`);setTimeout(closeGame,2000)}}},20)}c.onclick=cast;document.onkeydown=(e)=>{if(e.code==='Space')cast()};function loop(){update();draw();if(!fishing.gameOver)gameLoop=requestAnimationFrame(loop)}loop()}
+
+// Farm
+let farm={score:0,crops:0,plots:[],time:60};
+function startFarm(){const c=document.getElementById('farm-canvas'),ctx=c.getContext('2d');farm={score:0,crops:0,plots:[],time:60,start:Date.now()};for(let row=0;row<4;row++)for(let col=0;col<5;col++)farm.plots.push({x:80+col*100,y:60+row*100,stage:0,water:0,growing:false});function update(){const now=Date.now();farm.time=Math.max(0,60-Math.floor((now-farm.start)/1000));farm.plots.forEach(p=>{if(p.growing&&p.stage<3){p.water++;if(p.water>60){p.stage++;p.water=0;if(p.stage===3){farm.crops++;farm.score+=150}}});if(farm.time<=0){scores.farm=Math.max(scores.farm,farm.score);user.xp+=farm.score;showToast(`Harvest! +${farm.score} XP`);setTimeout(closeGame,2000);return}document.getElementById('farm-score').textContent=farm.score;document.getElementById('farm-crops').textContent=farm.crops}function draw(){ctx.fillStyle='#14532d';ctx.fillRect(0,0,c.width,c.height);farm.plots.forEach(p=>{ctx.fillStyle='#3f2e18';ctx.fillRect(p.x-35,p.y-35,70,70);ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.strokeRect(p.x-35,p.y-35,70,70);if(p.stage===0){ctx.fillStyle='rgba(255,255,255,0.3)';ctx.font='12px monospace';ctx.textAlign='center';ctx.fillText('CLICK',p.x,p.y+5)}else if(p.stage===1){ctx.fillStyle='#22c55e';ctx.beginPath();ctx.arc(p.x,p.y+10,8,0,Math.PI*2);ctx.fill()}else if(p.stage===2){ctx.fillStyle='#22c55e';ctx.fillRect(p.x-3,p.y-20,6,30);ctx.beginPath();ctx.ellipse(p.x,p.y-25,15,8,0,0,Math.PI*2);ctx.fill()}else if(p.stage===3){ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(p.x,p.y,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#d97706';ctx.font='bold 14px monospace';ctx.fillText('🌾',p.x-8,p.y+5)}if(p.growing&&p.stage<3){ctx.fillStyle='rgba(59,130,246,0.3)';ctx.fillRect(p.x-30,p.y+25,60*(p.water/60),4)}});ctx.fillStyle='#fff';ctx.font='bold 18px monospace';ctx.textAlign='left';ctx.fillText(`TIME: ${farm.time}s`,20,30);ctx.fillText('Click to plant/water',20,c.height-20)}c.onclick=(e)=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);farm.plots.forEach(p=>{if(mx>p.x-35&&mx<p.x+35&&my>p.y-35&&my<p.y+35){if(p.stage===0){p.growing=true;p.stage=1}else if(p.growing&&p.stage<3){p.water=Math.min(p.water+20,60)}}})};function loop(){update();draw();gameLoop=requestAnimationFrame(loop)}loop()}
+
+// Survival
+let survival={score:0,wave:1,player:{x:300,y:250},enemies:[],bullets:[],hp:100,gameOver:false};
+function startSurvival(){const c=document.getElementById('survival-canvas'),ctx=c.getContext('2d');survival={score:0,wave:1,player:{x:300,y:250},enemies:[],bullets:[],hp:100,gameOver:false,lastShot:0};let keys={},mouse={x:300,y:250};c.onmousemove=(e)=>{const rect=c.getBoundingClientRect();mouse.x=(e.clientX-rect.left)*(c.width/rect.width);mouse.y=(e.clientY-rect.top)*(c.height/rect.height)};c.onclick=()=>{const now=Date.now();if(now-survival.lastShot>300){survival.bullets.push({x:survival.player.x,y:survival.player.y,tx:mouse.x,ty:mouse.y});survival.lastShot=now}};document.onkeydown=(e)=>keys[e.key]=true;document.onkeyup=(e)=>keys[e.key]=false;function spawnWave(){for(let i=0;i<survival.wave*3;i++){const angle=Math.random()*Math.PI*2;survival.enemies.push({x:c.width/2+Math.cos(angle)*400,y:c.height/2+Math.sin(angle)*400,hp:20+survival.wave*5,speed:1+survival.wave*0.3,r:15})}}spawnWave();function update(){if(survival.gameOver)return;if(keys['w']||keys['ArrowUp'])survival.player.y-=4;if(keys['s']||keys['ArrowDown'])survival.player.y+=4;if(keys['a']||keys['ArrowLeft'])survival.player.x-=4;if(keys['d']||keys['ArrowRight'])survival.player.x+=4;survival.player.x=Math.max(20,Math.min(c.width-20,survival.player.x));survival.player.y=Math.max(20,Math.min(c.height-20,survival.player.y));survival.bullets.forEach(b=>{const dx=b.tx-b.x,dy=b.ty-b.y,dist=Math.sqrt(dx*dx+dy*dy);b.x+=(dx/dist)*8;b.y+=(dy/dist)*8});survival.bullets=survival.bullets.filter(b=>b.x>0&&b.x<c.width&&b.y>0&&b.y<c.height);survival.enemies.forEach(e=>{const dx=survival.player.x-e.x,dy=survival.player.y-e.y,dist=Math.sqrt(dx*dx+dy*dy);e.x+=(dx/dist)*e.speed;e.y+=(dy/dist)*e.speed;if(dist<25){survival.hp-=2;if(survival.hp<=0){survival.gameOver=true;scores.survival=Math.max(scores.survival,survival.score);user.xp+=survival.score;showToast(`Game Over! Wave ${survival.wave} • +${survival.score} XP`);setTimeout(closeGame,2500);return}}});survival.bullets.forEach((b,bi)=>{survival.enemies.forEach((e,ei)=>{const dx=b.x-e.x,dy=b.y-e.y;if(dx*dx+dy*dy<e.r*e.r){e.hp-=20;survival.bullets.splice(bi,1);if(e.hp<=0){survival.enemies.splice(ei,1);survival.score+=50}}})});if(survival.enemies.length===0){survival.wave++;survival.hp=Math.min(100,survival.hp+20);spawnWave()}document.getElementById('survival-score').textContent=survival.score;document.getElementById('survival-wave').textContent=survival.wave}function draw(){ctx.fillStyle='#1a0a1a';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='rgba(168,85,247,0.1)';ctx.lineWidth=1;for(let i=0;i<c.width;i+=50){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,c.height);ctx.stroke()}for(let i=0;i<c.height;i+=50){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(c.width,i);ctx.stroke()}ctx.fillStyle='#a855f7';ctx.beginPath();ctx.arc(survival.player.x,survival.player.y,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(survival.player.x,survival.player.y,5,0,Math.PI*2);ctx.fill();survival.enemies.forEach(e=>{ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#7f1d1d';ctx.beginPath();ctx.arc(e.x-3,e.y-3,4,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(e.x+3,e.y-3,4,0,Math.PI*2);ctx.fill()});survival.bullets.forEach(b=>{ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(b.x,b.y,4,0,Math.PI*2);ctx.fill()});ctx.fillStyle='rgba(255,255,255,0.1)';ctx.fillRect(20,20,200,12);ctx.fillStyle=survival.hp>50?'#22c55e':survival.hp>25?'#fbbf24':'#ef4444';ctx.fillRect(20,20,200*(survival.hp/100),12);ctx.fillStyle='#fff';ctx.font='12px monospace';ctx.fillText(`HP: ${survival.hp}`,230,30);ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(survival.player.x,survival.player.y);ctx.lineTo(mouse.x,mouse.y);ctx.stroke();ctx.setLineDash([])}function loop(){update();draw();if(!survival.gameOver)gameLoop=requestAnimationFrame(loop)}loop()}
+
+// ============================================
+// ROUTER
+// ============================================
+function go(p){page=p;const app=document.getElementById('app');
+  if(p==='login')app.innerHTML=renderLogin();
+  else if(p==='dashboard')app.innerHTML=renderDashboard();
+  else if(p==='admin')app.innerHTML=renderAdmin();
+  else if(p==='leaderboard')app.innerHTML=renderLeaderboard();
+  else if(p==='wallet')app.innerHTML=renderWallet();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const saved=localStorage.getItem('user');
+  if(saved){user=JSON.parse(saved);go('dashboard')}
+  else go('login');
+});
+</script>
+</body>
+</html>
